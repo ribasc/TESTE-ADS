@@ -52,8 +52,10 @@ function openForm({ title, fields, values = {}, onSave, onDelete }) {
   body.innerHTML = `<div class="form-grid">${fields.map((f) => renderField(f, values[f.name])).join('')}</div>`;
   const del = $('#modal-delete');
   del.hidden = !onDelete;
+  del.textContent = 'Excluir';
+  delete del.dataset.armed;
   del.onclick = async () => {
-    if (!confirm('Tem certeza que quer excluir?')) return;
+    if (!del.dataset.armed) { del.dataset.armed = '1'; del.textContent = 'Toque de novo para excluir'; return; }
     try { await onDelete(); dialog.close(); } catch (e) { $('#modal-error').textContent = e.message; }
   };
   const form = $('#modal-form');
