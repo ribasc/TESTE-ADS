@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Entrar · Área do casal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    body { min-height: 100vh; display: grid; place-items: center; padding: 16px; }
+    .login { width: 100%; max-width: 380px; padding: 2rem 1.6rem; }
+    .login h1 { text-align: center; }
+    .login .sub { text-align: center; margin: .3rem 0 1.6rem; }
+    .login form { display: grid; gap: 1rem; }
+    .ornament { text-align: center; color: var(--gold); font-family: var(--serif); font-size: 1.6rem; margin-bottom: .2rem; }
+  </style>
+</head>
+<body>
+  <main class="card login">
+    <div class="ornament">♡</div>
+    <h1>Área do casal</h1>
+    <p class="sub muted">Só para os noivos. Entre para organizar o grande dia.</p>
+    <form id="form">
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input id="email" name="email" type="email" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="password">Senha</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <div class="error" id="error" role="alert"></div>
+      <button class="btn primary" type="submit">Entrar</button>
+    </form>
+  </main>
+  <script>
+    const form = document.getElementById('form');
+    const error = document.getElementById('error');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      error.textContent = '';
+      const btn = form.querySelector('button');
+      btn.disabled = true;
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: form.email.value, password: form.password.value }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Não foi possível entrar.');
+        const back = new URLSearchParams(location.search).get('voltar');
+        location.href = back && back.startsWith('/painel') ? back : '/painel/';
+      } catch (err) {
+        error.textContent = err.message;
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

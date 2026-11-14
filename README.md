@@ -1,2 +1,65 @@
-# TESTE ADS
-TESTE ADS
+# Casamento Lucas & Karen
+
+Site do casamento em duas partes:
+
+1. **Área do casal** (`/painel`): painel privado para organizar o casamento, com login e só para os noivos. **Pronta.**
+2. **Página dos convidados** (`/`): convite com data, local, traje, cardápio, confirmação de presença e lista de presentes (Pix/cartão). **Próxima etapa** (por enquanto é só um "em breve").
+
+## O que tem no painel do casal
+
+| Seção | Para que serve |
+|---|---|
+| **Início** | Contagem regressiva, progresso das tarefas, orçamento gasto, convidados confirmados, próximas tarefas e próximos pagamentos |
+| **Tarefas** | Checklist por antecedência (12 meses antes → depois do casamento), com responsável (Lucas / Karen / Ambos), prazo e filtros. Botão para carregar um checklist sugerido com ~40 itens |
+| **Orçamento** | Previsto × contratado × pago por categoria, teto do orçamento, vencimentos e vínculo com fornecedor |
+| **Convidados** | Cada linha é um convite (pessoa, casal ou família): adultos/crianças, lado, grupo, presença, mesa, restrições alimentares, se o convite já foi enviado. Exporta planilha (CSV). Cada convite já ganha um **código único**, que vai virar o link pessoal de confirmação na página dos convidados |
+| **Fornecedores** | Quem estão pesquisando e quem já contrataram, com valor, contato e links diretos para WhatsApp/Instagram |
+| **Detalhes** | Data, locais, horários, traje, cardápio, mensagem e chave Pix: os dados que vão alimentar a página dos convidados |
+
+## Como rodar
+
+Precisa do Node.js 22.13 ou mais novo. Não precisa instalar banco de dados: ele usa o SQLite que já vem no Node.
+
+```bash
+npm install
+
+# criar as duas contas (rode uma vez para cada)
+npm run user:create -- "Lucas" lucas@email.com "uma-senha-forte"
+npm run user:create -- "Karen" karen@email.com "outra-senha-forte"
+
+npm start
+# abra http://localhost:3000/painel
+```
+
+Rodar `user:create` de novo com o mesmo e-mail troca a senha.
+
+### Variáveis de ambiente
+
+| Variável | Padrão | Para que serve |
+|---|---|---|
+| `PORT` | `3000` | Porta do servidor |
+| `DB_PATH` | `data/casamento.db` | Onde o banco fica salvo (a pasta `data/` não vai para o Git) |
+| `COUPLE_USERS` | — | Cria as contas ao iniciar, útil em hospedagem: `Lucas:lucas@email.com:senha;Karen:karen@email.com:senha` |
+| `NODE_ENV` | — | Use `production` em hospedagem com HTTPS (o cookie de login passa a ser só HTTPS) |
+
+### Testes
+
+```bash
+npm test
+```
+
+## Segurança
+
+- Senhas guardadas com hash (scrypt), nunca em texto puro.
+- Login por sessão em cookie `HttpOnly`, que vale por 30 dias.
+- O painel e toda a API do painel exigem login. Sem ele, a página redireciona para `/entrar` e a API responde 401.
+- Limite de 10 tentativas de login a cada 15 minutos por IP.
+
+## Estrutura
+
+```
+server/         servidor Express, banco SQLite, login e API
+public/         páginas (convidados, login e painel do casal)
+scripts/        criação de contas do casal
+test/           testes automáticos da API
+```
