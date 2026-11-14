@@ -1,0 +1,9 @@
+{
+  "name": "Site do casamento",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "postCreateCommand": "npm install",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": { "label": "Site do casamento", "onAutoForward": "openBrowser" }
+  }
+}

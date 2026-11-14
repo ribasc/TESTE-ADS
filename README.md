@@ -16,6 +16,23 @@ Site do casamento em duas partes:
 | **Fornecedores** | Quem estão pesquisando e quem já contrataram, com valor, contato e links diretos para WhatsApp/Instagram |
 | **Detalhes** | Data, locais, horários, traje, cardápio, mensagem e chave Pix: os dados que vão alimentar a página dos convidados |
 
+## Ver o site antes de publicar
+
+**Pelo navegador, sem instalar nada (GitHub Codespaces, gratuito):**
+1. No GitHub, abra o repositório e escolha o branch `ccr-f32a6ecd-6jtww4`.
+2. Clique em **Code → Codespaces → Create codespace on …** e espere carregar (1 a 2 minutos).
+3. No terminal que aparece embaixo, digite `npm run demo` e aperte Enter.
+4. Clique em **Open in Browser** no aviso que aparecer. Depois acrescente `/painel` no endereço.
+5. Entre com `lucas@demo.com` (ou `karen@demo.com`), senha `demo1234`.
+6. Quando terminar, feche a aba. O Codespace desliga sozinho depois de 30 minutos parado.
+
+**No próprio computador:** instale o Node.js 22 (nodejs.org, versão LTS), baixe o projeto
+(no GitHub: **Code → Download ZIP**), abra um terminal na pasta e rode `npm install` e depois `npm run demo`.
+Abra http://localhost:3000/painel.
+
+O `npm run demo` usa um banco separado com dados de exemplo e o recria do zero toda vez,
+então pode mexer à vontade.
+
 ## Como rodar
 
 Precisa do Node.js 22.13 ou mais novo. Não precisa instalar banco de dados: ele usa o SQLite que já vem no Node.
